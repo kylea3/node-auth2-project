@@ -1,6 +1,11 @@
 const { JWT_SECRET } = require("../secrets"); // use this secret!
 
 const restricted = (req, res, next) => {
+  const { token } = req.headers;
+
+  if(!token) {
+    next(res.status(401).json({ message: "Token required"}))
+  } 
   /*
     If the user does not provide a token in the Authorization header:
     status 401
@@ -33,6 +38,11 @@ const only = role_name => (req, res, next) => {
 
 
 const checkUsernameExists = (req, res, next) => {
+  if (!req.body.username) {
+    next(res.status(401).json({ message: 'Invalid crednetials'}))
+  } else {
+    next()
+  }
   /*
     If the username in req.body does NOT exist in the database
     status 401
