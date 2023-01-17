@@ -27,6 +27,10 @@ function find() {
 }
 
 function findBy(filter) {
+  return db('users as u')
+  .select('u.user_id', 'u.username', 'r.role_name')
+  .leftJoin('roles as r', 'u.role_id', 'r.role_id')
+  .where(filter)
   /**
     You will need to join two tables.
     Resolves to an ARRAY with all users that match the filter condition.
@@ -42,7 +46,13 @@ function findBy(filter) {
    */
 }
 
-function findById(user_id) {
+async function findById(user_id) {
+  user = await db('user as u')
+  .select('u.user_id', 'u.username', 'r.role_name')
+  .leftJoin('roles as r', 'u.role_id', 'r.role_id')
+  .where('user_id', user_id)
+
+  return user
   /**
     You will need to join two tables.
     Resolves to the user with the given user_id.
