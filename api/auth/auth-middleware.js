@@ -34,6 +34,13 @@ const restricted = (req, res, next) => {
 }
 
 const only = role_name => (req, res, next) => {
+  console.log(role_name)
+  console.log(req.decodedJwt)
+  if(req.decodedJwt.role !== role_name) {
+    next(res.status(403).json({ message: "This is not for you"}))
+  } else {
+    next()
+  }
   /*
     If the user does not provide a token in the Authorization header with a role_name
     inside its payload matching the role_name passed to this function as its argument:

@@ -47,7 +47,7 @@ function findBy(filter) {
 }
 
 async function findById(user_id) {
-  user = await db('user as u')
+  user = await db('users as u')
   .select('u.user_id', 'u.username', 'r.role_name')
   .leftJoin('roles as r', 'u.role_id', 'r.role_id')
   .where('user_id', user_id)
