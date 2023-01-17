@@ -32,11 +32,11 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
   User.findBy({ username })
   .then(user => {
     console.log(user)
-    if (user && bcrypt.compareSync(password, user[0].password)) {
-      const token = buildToken(user[0])
-      res.status(200).json({ message: `Welcome back ${user[0].username}...`, token})
+    if (user && bcrypt.compareSync(password, req.user.password)) {
+      const token = buildToken(req.user)
+      res.status(200).json({ message: `${req.user.username} is back`, token})
     } else {
-      next({ status:401, message: 'Invalid Credentials' })
+      next(res.status(401).json({ message: 'Invalid Credentials' }))
     }})
     .catch(next)
 
