@@ -5,8 +5,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../users/users-model')
 const bcrypt = require('bcryptjs')
 
-router.post("/register", validateRoleName, (req, res, next) => {
-
+router.post("/register", validateRoleName, async (req, res, next) => {
+  console.log(req.body)
+  await User.add(req.body)
+  .then(user => {
+    res.status(201).json(user)
+  })
+  .catch(next)
   /**
     [POST] /api/auth/register { "username": "anna", "password": "1234", "role_name": "angel" }
 
