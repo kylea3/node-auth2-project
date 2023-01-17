@@ -78,7 +78,7 @@ const checkUsernameExists = async (req, res, next) => {
 
 
 const validateRoleName = (req, res, next) => {
-  const { role_name } = req.body;
+  let { role_name } = req.body;
   if(!role_name || role_name.trim() === '') {
     req.role_name = 'student'
     next()
@@ -87,6 +87,7 @@ const validateRoleName = (req, res, next) => {
   } else if (role_name.trim().length > 32) {
     next(res.status(422).json({ message: 'Role name can not be longer than 32 chars'}))
   } else {
+    req.role_name = req.body.role_name.trim()
     next()
   }
   /*

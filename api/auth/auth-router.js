@@ -5,11 +5,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../users/users-model')
 const bcrypt = require('bcryptjs')
 
-router.post("/register", validateRoleName, async (req, res, next) => {
-  console.log(req.body)
-  await User.add(req.body)
+router.post("/register", validateRoleName, (req, res, next) => {
+  const { username, password } = req.body
+  const { role_name } = req 
+  const hash = bcrypt.hashSync(password, 8)
+  User.add({username, password: hash, role_name})
   .then(user => {
-    res.status(201).json(user)
+    res.status(201).json(user[0])
   })
   .catch(next)
   /**
@@ -31,7 +33,6 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
   
   User.findBy({ username })
   .then(user => {
-    console.log(user)
     if (user && bcrypt.compareSync(password, req.user.password)) {
       const token = buildToken(req.user)
       res.status(200).json({ message: `${req.user.username} is back`, token})
